@@ -1,4 +1,5 @@
 import random
+from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import TypeAlias, TypedDict
 
@@ -55,23 +56,22 @@ class DataProvider:
         return self._generate_humans(groups=_groups, amount_of_humans=amount_of_humans)
 
 
-def organize_data(humans: T_HUMANS):
+def organize_data(humans: T_HUMANS) -> dict:
     """
     Organize data in way, useful for further processing.
     At this stage not allowed to make output string.
     """
-    groups = {}
+    groups = defaultdict(list)
 
     for human in humans:
-        name, group = human.values()
-        if group not in groups:
-            groups[group] = []
+        name = human['name']
+        group = human['group']
         groups[group].append(name)
 
-    return groups
+    return dict(groups)
 
 
-def get_formatted_output(data) -> str:
+def get_formatted_output(data: dict) -> str:
     """
     Get output string. That can be used to print in console.
     """
